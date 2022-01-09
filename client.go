@@ -7,8 +7,6 @@ import (
 	"net"
 	"net/http"
 	"time"
-
-	"github.com/kr/pretty"
 )
 
 type Client struct {
@@ -75,7 +73,6 @@ func (self *Client) do(method, path string, x io.Reader, headers Headers) ([]byt
 		}
 	}
 	if resp.StatusCode != 200 || response.StatusCode != 200 {
-		pretty.Println(resp.Status)
 		println(string(b))
 		return nil, fmt.Errorf("Invalid response status code from %s: %d: %s", self.host, resp.StatusCode, response.Message)
 	}
