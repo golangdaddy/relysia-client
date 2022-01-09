@@ -14,8 +14,6 @@ import (
 type Client struct {
 	httpClient *http.Client
 	host       string
-	in         chan *http.Request
-	out        chan interface{}
 	authToken  string
 }
 
@@ -32,10 +30,7 @@ func NewClient() *Client {
 				TLSHandshakeTimeout: 5 * time.Second,
 			},
 		},
-		in:  make(chan *http.Request),
-		out: make(chan interface{}),
 	}
-	go client.rateLimiter()
 	return client
 }
 
@@ -54,7 +49,7 @@ func (self *Client) do(method, path string, x io.Reader, headers Headers) ([]byt
 		x,
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("DoRequest: %s", err)
 	}
 
 	for k, v := range headers {
@@ -62,67 +57,43 @@ func (self *Client) do(method, path string, x io.Reader, headers Headers) ([]byt
 		//println("HEADER", k, v)
 	}
 
-	self.in <- req
-
-	switch v := (<-self.out).(type) {
-	case error:
-		return nil, v
-	case []byte:
-		return v, nil
-	case json.RawMessage:
-		return []byte(v), nil
+	resp, err := self.httpClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("DoRequest: %s", err)
 	}
-	return nil, nil
-}
 
-func (self *Client) rateLimiter() {
-	for range time.NewTicker(time.Second / 10).C {
-
-		req := <-self.in
-
-		resp, err := self.httpClient.Do(req)
-		if err != nil {
-			self.out <- err
-			continue
-		}
-
-		b, err := io.ReadAll(resp.Body)
-		if err != nil {
-			self.out <- err
-			continue
-		}
-		resp.Body.Close()
-
-		response := &Response{}
-		if len(b) > 0 {
-			if err := json.Unmarshal(b, response); err != nil {
-				self.out <- fmt.Errorf("Invalid response from server: %s", err)
-				continue
-			}
-		}
-		if resp.StatusCode != 200 || response.StatusCode != 200 {
-			pretty.Println(resp.Status)
-			self.out <- fmt.Errorf("Invalid response status code from %s: %d: %s", self.host, resp.StatusCode, response.Message)
-			println(string(b))
-			continue
-		}
-		self.out <- response.Data
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("DoRequest: %s", err)
 	}
+	resp.Body.Close()
+
+	response := &Response{}
+	if len(b) > 0 {
+		if err := json.Unmarshal(b, response); err != nil {
+			return nil, fmt.Errorf("DoRequest: Invalid response from server: %s", err)
+		}
+	}
+	if resp.StatusCode != 200 || response.StatusCode != 200 {
+		pretty.Println(resp.Status)
+		println(string(b))
+		return nil, fmt.Errorf("Invalid response status code from %s: %d: %s", self.host, resp.StatusCode, response.Message)
+	}
+
+	return []byte(response.Data), nil
 }
 
 func (self *Client) InitBeta() error {
+	methodName := "InitBeta"
 
 	_, err := self.do(
 		"GET",
 		"v1/initBeta",
 		nil,
-		map[string]string{
-			"serviceID": "",
-			"authToken": "",
-		},
+		self.GETHeaders(),
 	)
 	if err != nil {
-		return fmt.Errorf("DecodeTransaction: %s", err.Error())
+		return fmt.Errorf("%s: %s", methodName, err.Error())
 	}
 
 	return nil

@@ -151,6 +151,46 @@ func (self *Client) CurrencyConversion(satoshis int, currency string) (float64, 
 	return response.Balance, nil
 }
 
+type BalanceResponse struct {
+	Status       string `json:"status"`
+	Msg          string `json:"msg"`
+	TotalBalance struct {
+		Currency string `json:"currency"`
+	} `json:"totalBalance"`
+	Coins []struct {
+		Protocol string `json:"protocol"`
+		Balance  int    `json:"balance"`
+	} `json:"coins"`
+}
+
+func (self *Client) Balance(walletID, currency string) (*BalanceResponse, error) {
+	methodName := "Balance"
+
+	headers := Headers{
+		"walletID": walletID,
+		"currency": currency,
+	}
+
+	b, err := self.do(
+		"GET",
+		"v1/balance",
+		nil,
+		self.GETHeaders(headers),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
+	}
+
+	response := &BalanceResponse{}
+	if err := json.Unmarshal(b, response); err != nil {
+		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
+	}
+
+	println(string(b))
+
+	return response, nil
+}
+
 func (self *Client) DeleteWallet(id string) error {
 	methodName := "DeleteWallet"
 
@@ -163,6 +203,22 @@ func (self *Client) DeleteWallet(id string) error {
 		"v1/wallet",
 		nil,
 		self.GETHeaders(headers),
+	)
+	if err != nil {
+		return fmt.Errorf("%s: %s", methodName, err.Error())
+	}
+
+	return nil
+}
+
+func (self *Client) DeleteWallets() error {
+	methodName := "DeleteWallets"
+
+	_, err := self.do(
+		"DELETE",
+		"v1/wallets",
+		nil,
+		self.GETHeaders(),
 	)
 	if err != nil {
 		return fmt.Errorf("%s: %s", methodName, err.Error())
