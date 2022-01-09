@@ -26,4 +26,29 @@ func TestClient(t *testing.T) {
 
 	client.SetAccessToken(token)
 
+	assert.Nil(client.CreateWallet("default"))
+
+	walletList, err := client.Wallets()
+	assert.Nil(err)
+	assert.Equal(1, len(walletList))
+
+	mn, err := client.Mnemonic()
+	assert.Nil(err)
+	println(mn)
+	assert.Greater(len(mn), 0)
+
+	add, pym, err := client.Address("")
+	assert.Nil(err)
+	println(add, pym)
+	assert.Greater(len(add), 0)
+	assert.Greater(len(pym), 0)
+
+	assert.Nil(client.CreateWallet("one"))
+
+	walletList, err = client.Wallets()
+	assert.Nil(err)
+	assert.Equal(2, len(walletList))
+
+	assert.Nil(client.DeleteWallet("one"))
+
 }

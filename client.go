@@ -12,11 +12,11 @@ import (
 )
 
 type Client struct {
-	httpClient  *http.Client
-	host        string
-	in          chan *http.Request
-	out         chan interface{}
-	accessToken string
+	httpClient *http.Client
+	host       string
+	in         chan *http.Request
+	out        chan interface{}
+	authToken  string
 }
 
 func NewClient() *Client {
@@ -40,7 +40,7 @@ func NewClient() *Client {
 }
 
 func (self *Client) SetAccessToken(token string) {
-	self.accessToken = token
+	self.authToken = token
 }
 
 func (self *Client) do(method, path string, x io.Reader, headers Headers) ([]byte, error) {
@@ -59,6 +59,7 @@ func (self *Client) do(method, path string, x io.Reader, headers Headers) ([]byt
 
 	for k, v := range headers {
 		req.Header.Set(k, v)
+		//println("HEADER", k, v)
 	}
 
 	self.in <- req
@@ -101,7 +102,8 @@ func (self *Client) rateLimiter() {
 		}
 		if resp.StatusCode != 200 || response.StatusCode != 200 {
 			pretty.Println(resp.Status)
-			self.out <- fmt.Errorf("Invalid response status code from %s: %d: %s", self.host, resp.StatusCode, response.Error)
+			self.out <- fmt.Errorf("Invalid response status code from %s: %d: %s", self.host, resp.StatusCode, response.Message)
+			println(string(b))
 			continue
 		}
 		self.out <- response.Data

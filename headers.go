@@ -2,15 +2,30 @@ package relysia
 
 type Headers map[string]string
 
-func (self *Client) defaultHeaders(additionalHeaders ...map[string]string) (d Headers) {
-	d = map[string]string{
+func (self *Client) POSTHeaders(additionalHeaders ...map[string]string) (d Headers) {
+	d = Headers{
 		"accept":       "*/*",
 		"Content-Type": "application/json",
 	}
+	if len(self.authToken) > 0 {
+		d["authToken"] = self.authToken
+	}
 	if len(additionalHeaders) > 0 {
-		if len(self.accessToken) > 0 {
-			d["accessToken"] = self.accessToken
+		for k, v := range additionalHeaders[0] {
+			d[k] = v
 		}
+	}
+	return d
+}
+
+func (self *Client) GETHeaders(additionalHeaders ...map[string]string) (d Headers) {
+	d = Headers{
+		"accept": "*/*",
+	}
+	if len(self.authToken) > 0 {
+		d["authToken"] = self.authToken
+	}
+	if len(additionalHeaders) > 0 {
 		for k, v := range additionalHeaders[0] {
 			d[k] = v
 		}

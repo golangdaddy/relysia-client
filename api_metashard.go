@@ -23,7 +23,7 @@ func (self *Client) Upload(clientKey, clientSecret, code string) error {
 		"POST",
 		"v1/oauth/token",
 		bytes.NewBuffer(b),
-		self.defaultHeaders(),
+		self.POSTHeaders(),
 	)
 	if err != nil {
 		return fmt.Errorf("%s: %s", methodName, err.Error())

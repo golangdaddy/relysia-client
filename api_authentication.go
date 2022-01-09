@@ -28,7 +28,7 @@ func (self *Client) SignUp(email, pass string) (string, error) {
 		"POST",
 		"v1/signUp",
 		bytes.NewBuffer(b),
-		self.defaultHeaders(),
+		self.POSTHeaders(),
 	)
 	if err != nil {
 		return "", fmt.Errorf("%s: %s", methodName, err.Error())
@@ -57,7 +57,7 @@ func (self *Client) Auth(email, pass string) (string, error) {
 		"POST",
 		"v1/auth",
 		bytes.NewBuffer(b),
-		self.defaultHeaders(),
+		self.POSTHeaders(),
 	)
 	if err != nil {
 		return "", fmt.Errorf("%s: %s", methodName, err.Error())
