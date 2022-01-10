@@ -149,6 +149,39 @@ func (self *Client) AllAddresses(walletID string) ([]*AddressResponse, error) {
 	return response.Addresses, nil
 }
 
+type HistoryResponse struct {
+	Status    string        `json:"status"`
+	Msg       string        `json:"msg"`
+	Histories []interface{} `json:"histories"`
+}
+
+func (self *Client) History(walletID string) (*HistoryResponse, error) {
+	methodName := "History"
+
+	headers := Headers{
+		"walletID": walletID,
+	}
+
+	b, err := self.do(
+		"GET",
+		"v1/history",
+		nil,
+		self.GETHeaders(headers),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
+	}
+
+	response := &HistoryResponse{}
+	if err := json.Unmarshal(b, response); err != nil {
+		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
+	}
+
+	println(string(b))
+
+	return response, nil
+}
+
 type CurrencyResponse struct {
 	Status   string  `json:"status"`
 	Msg      string  `json:"msg"`

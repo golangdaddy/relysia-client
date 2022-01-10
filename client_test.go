@@ -60,6 +60,11 @@ func TestClient(t *testing.T) {
 		assert.Nil(err)
 		assert.Greater(len(ads), 1)
 	*/
+
+	hr, err := client.History("")
+	assert.Nil(err)
+	assert.NotNil(hr)
+
 	assert.Nil(client.CreateWallet("one"))
 
 	walletList, err = client.Wallets()
