@@ -25,6 +25,15 @@ func TestClient(t *testing.T) {
 	assert.Greater(len(token), 0)
 
 	client.SetAccessToken(token)
+	println(token)
+
+	assert.Nil(client.FeeMetricsBeta())
+	_, err = client.FeeAddressBeta()
+	assert.Nil(err)
+
+	userDetails, err := client.User()
+	assert.Nil(err)
+	assert.NotNil(userDetails)
 
 	assert.Nil(client.CreateWallet("default"))
 
@@ -55,5 +64,6 @@ func TestClient(t *testing.T) {
 
 	assert.Nil(client.DeleteWallet("one"))
 	assert.Nil(client.DeleteWallets())
+	assert.Nil(client.DeleteUser())
 
 }

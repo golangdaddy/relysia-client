@@ -79,19 +79,3 @@ func (self *Client) do(method, path string, x io.Reader, headers Headers) ([]byt
 
 	return []byte(response.Data), nil
 }
-
-func (self *Client) InitBeta() error {
-	methodName := "InitBeta"
-
-	_, err := self.do(
-		"GET",
-		"v1/initBeta",
-		nil,
-		self.GETHeaders(),
-	)
-	if err != nil {
-		return fmt.Errorf("%s: %s", methodName, err.Error())
-	}
-
-	return nil
-}
