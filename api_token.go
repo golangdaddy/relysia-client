@@ -78,7 +78,7 @@ func (self *Client) GetToken(id string) (*IssueRequest, error) {
 		"GET",
 		fmt.Sprintf("v1/token/%s", id),
 		nil,
-		self.GETHeaders(nil),
+		self.GETHeaders(),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
