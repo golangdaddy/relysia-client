@@ -55,7 +55,11 @@ func TestClient(t *testing.T) {
 	println(add, pym)
 	assert.Greater(len(add), 0)
 	assert.Greater(len(pym), 0)
-
+	/*
+		ads, err := client.AllAddresses("")
+		assert.Nil(err)
+		assert.Greater(len(ads), 1)
+	*/
 	assert.Nil(client.CreateWallet("one"))
 
 	walletList, err = client.Wallets()

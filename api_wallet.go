@@ -118,6 +118,37 @@ func (self *Client) Address(walletID string) (string, string, error) {
 	return response.Address, response.Paymail, nil
 }
 
+type AllAddressesResponse struct {
+	Status    string             `json:"status"`
+	Msg       string             `json:"msg"`
+	Addresses []*AddressResponse `json:"address"`
+}
+
+func (self *Client) AllAddresses(walletID string) ([]*AddressResponse, error) {
+	methodName := "AllAddresses"
+
+	headers := Headers{
+		"walletID": walletID,
+	}
+
+	b, err := self.do(
+		"GET",
+		"v1/allAddresses",
+		nil,
+		self.GETHeaders(headers),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
+	}
+
+	response := &AllAddressesResponse{}
+	if err := json.Unmarshal(b, response); err != nil {
+		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
+	}
+
+	return response.Addresses, nil
+}
+
 type CurrencyResponse struct {
 	Status   string  `json:"status"`
 	Msg      string  `json:"msg"`
