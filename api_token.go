@@ -70,3 +70,24 @@ func (self *Client) Issue(headers Headers, issueRequest *IssueRequest) (float64,
 
 	return response.Balance, nil
 }
+
+func (self *Client) GetToken(id string) (*IssueRequest, error) {
+	methodName := "GetToken"
+
+	b, err := self.do(
+		"GET",
+		fmt.Sprintf("v1/token/%s", id),
+		nil,
+		self.GETHeaders(nil),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
+	}
+
+	response := &IssueRequest{}
+	if err := json.Unmarshal(b, response); err != nil {
+		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
+	}
+
+	return response, nil
+}
