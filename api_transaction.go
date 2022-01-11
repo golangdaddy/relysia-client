@@ -11,14 +11,14 @@ func (self *Client) Send(walletID, address, currencyType, notes string, amount f
 	methodName := "Send"
 
 	headers := Headers{
-		"type":     currencyType,
 		"walletID": walletID,
-		"notes":    notes,
 	}
 
 	b, _ := json.Marshal(
 		map[string]string{
 			"address": address,
+			"notes":   notes,
+			"type":    currencyType,
 			"amount":  strconv.FormatFloat(amount, 'f', -1, 64),
 		},
 	)
