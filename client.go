@@ -32,6 +32,12 @@ func NewClient() *Client {
 	return client
 }
 
+func (self *Client) WithToken(token string) *Client {
+	newClient := *self
+	newClient.authToken = token
+	return &newClient
+}
+
 func (self *Client) SetAccessToken(token string) {
 	self.authToken = token
 }
