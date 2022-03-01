@@ -34,14 +34,16 @@ type IssueRequest struct {
 			Legal    struct {
 				Terms string `json:"terms"`
 			} `json:"legal"`
-			Media []struct {
-				URI    string `json:"URI"`
-				Type   string `json:"type"`
-				AltURI string `json:"altURI"`
-			} `json:"media"`
+			Media []*IR_Media `json:"media"`
 		} `json:"meta"`
 	} `json:"properties"`
 	Splitable bool `json:"splitable"`
+}
+
+type IR_Media struct {
+	URI    string `json:"URI"`
+	Type   string `json:"type"`
+	AltURI string `json:"altURI"`
 }
 
 func (self *Client) Issue(headers Headers, issueRequest *IssueRequest) (float64, error) {
