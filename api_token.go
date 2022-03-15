@@ -46,12 +46,63 @@ type IR_Media struct {
 	AltURI string `json:"altURI"`
 }
 
-func (self *Client) Issue(headers Headers, issueRequest *IssueRequest) (float64, error) {
+type IssueResponse struct {
+	StatusCode int `json:"statusCode"`
+	Data       struct {
+		Status   string `json:"status"`
+		Msg      string `json:"msg"`
+		TokenID  string `json:"tokenId"`
+		TokenObj struct {
+			Name         string `json:"name"`
+			ProtocolID   string `json:"protocolId"`
+			Symbol       string `json:"symbol"`
+			Description  string `json:"description"`
+			Image        string `json:"image"`
+			TotalSupply  int    `json:"totalSupply"`
+			Decimals     int    `json:"decimals"`
+			SatsPerToken int    `json:"satsPerToken"`
+			Properties   struct {
+				Legal struct {
+					Terms     string `json:"terms"`
+					LicenceID string `json:"licenceId"`
+				} `json:"legal"`
+				Issuer struct {
+					Organisation  string `json:"organisation"`
+					LegalForm     string `json:"legalForm"`
+					GoverningLaw  string `json:"governingLaw"`
+					IssuerCountry string `json:"issuerCountry"`
+					Jurisdiction  string `json:"jurisdiction"`
+					Email         string `json:"email"`
+				} `json:"issuer"`
+				Meta struct {
+					SchemaID string `json:"schemaId"`
+					Website  string `json:"website"`
+					Legal    struct {
+						Terms string `json:"terms"`
+					} `json:"legal"`
+					Media []struct {
+						URI    string `json:"URI"`
+						Type   string `json:"type"`
+						AltURI string `json:"altURI"`
+					} `json:"media"`
+				} `json:"meta"`
+			} `json:"properties"`
+			ContractTxid    string `json:"contractTxid"`
+			IssueTxid       string `json:"issueTxid"`
+			IntialSupply    int    `json:"intialSupply"`
+			ContractAddress string `json:"contractAddress"`
+			CreationDate    string `json:"creationDate"`
+			UserID          string `json:"userId"`
+		} `json:"tokenObj"`
+	} `json:"data"`
+}
+
+func (self *Client) Issue(headers Headers, issueRequest *IssueRequest) (*IssueResponse, error) {
 	methodName := "Issue"
 
 	b, err := json.Marshal(issueRequest)
 	if err != nil {
-		return 0, fmt.Errorf("%s: %s", methodName, err.Error())
+		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
 	}
 	println(string(b))
 
@@ -62,15 +113,15 @@ func (self *Client) Issue(headers Headers, issueRequest *IssueRequest) (float64,
 		self.POSTHeaders(headers),
 	)
 	if err != nil {
-		return 0, fmt.Errorf("%s: %s", methodName, err.Error())
+		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
 	}
 
-	response := &CurrencyResponse{}
+	response := &IssueResponse{}
 	if err := json.Unmarshal(b, response); err != nil {
-		return 0, fmt.Errorf("%s: %s", methodName, err.Error())
+		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
 	}
 
-	return response.Balance, nil
+	return response, nil
 }
 
 func (self *Client) GetToken(id string) (*IssueRequest, error) {
