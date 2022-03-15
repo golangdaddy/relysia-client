@@ -6,24 +6,35 @@ import (
 	"strconv"
 )
 
-func (self *Client) CreateWallet(walletTitle string) error {
+type CreateWalletResponse struct {
+	Status   string `json:"status"`
+	Msg      string `json:"msg"`
+	WalletID string `json:"walletID"`
+}
+
+func (self *Client) CreateWallet(walletTitle string) (string, error) {
 	methodName := "CreateWallet"
 
 	headers := Headers{
 		"walletTitle": walletTitle,
 	}
 
-	_, err := self.do(
+	b, err := self.do(
 		"GET",
 		"v1/createWallet",
 		nil,
 		self.GETHeaders(headers),
 	)
 	if err != nil {
-		return fmt.Errorf("%s: %s", methodName, err.Error())
+		return "", fmt.Errorf("%s: %s", methodName, err.Error())
 	}
 
-	return nil
+	response := &CreateWalletResponse{}
+	if err := json.Unmarshal(b, response); err != nil {
+		return "", fmt.Errorf("%s: %s", methodName, err.Error())
+	}
+
+	return response.WalletID, nil
 }
 
 type WalletsResponse struct {
