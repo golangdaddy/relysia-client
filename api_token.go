@@ -34,7 +34,7 @@ type IssueRequest struct {
 			Legal    struct {
 				Terms string `json:"terms"`
 			} `json:"legal"`
-			Media []*IR_Media `json:"media"`
+			Media []*MetaMedia `json:"media"`
 		} `json:"meta"`
 	} `json:"properties"`
 	Splitable bool `json:"splitable"`
@@ -45,7 +45,7 @@ func (self *IssueRequest) ToJSON() []byte {
 	return b
 }
 
-type IR_Media struct {
+type MetaMedia struct {
 	URI    string `json:"URI"`
 	Type   string `json:"type"`
 	AltURI string `json:"altURI"`
@@ -133,7 +133,7 @@ func DemoTokenRequest() *IssueRequest {
 	issueRequest.Properties.Meta.Legal.Terms = "© 2020 TAAL TECHNOLOGIES SEZC\nALL RIGHTS RESERVED. ANY USE OF THIS SOFTWARE IS SUBJECT TO TERMS AND CONDITIONS OF LICENSE. USE OF THIS SOFTWARE WITHOUT LICENSE CONSTITUTES INFRINGEMENT OF INTELLECTUAL PROPERTY. FOR LICENSE DETAILS OF THE SOFTWARE, PLEASE REFER TO: www.taal.com/stas-token-license-agreement"
 	issueRequest.Properties.Meta.Media = append(
 		issueRequest.Properties.Meta.Media,
-		&IR_Media{
+		&MetaMedia{
 			URI:    "https://picsum.photos/200",
 			Type:   "image",
 			AltURI: "https://picsum.photos/200",
