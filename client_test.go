@@ -42,7 +42,7 @@ func TestClient(t *testing.T) {
 	assert.Nil(err)
 	assert.Equal(1, len(walletList))
 
-	value, err := client.Balance(defaultWalletID, "BSV")
+	value, err := client.Balance(defaultWalletID, "STAS", "")
 	assert.Nil(err)
 	assert.NotNil(value)
 
@@ -82,6 +82,10 @@ func TestClient(t *testing.T) {
 	)
 	assert.Nil(err)
 	assert.NotNil(resp)
+
+	value, err = client.Balance(defaultWalletID, "STAS", "")
+	assert.Nil(err)
+	assert.NotNil(value)
 
 	assert.Nil(client.DeleteWallet(oneWalletID))
 	assert.Nil(client.DeleteWallets())

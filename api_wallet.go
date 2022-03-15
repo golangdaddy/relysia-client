@@ -238,11 +238,12 @@ type BalanceResponse struct {
 	} `json:"coins"`
 }
 
-func (self *Client) Balance(walletID, currency string) (*BalanceResponse, error) {
+func (self *Client) Balance(walletID, requestType, currency string) (*BalanceResponse, error) {
 	methodName := "Balance"
 
 	headers := Headers{
 		"walletID": walletID,
+		"type":     requestType,
 		"currency": currency,
 	}
 
