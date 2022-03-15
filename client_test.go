@@ -35,13 +35,14 @@ func TestClient(t *testing.T) {
 	assert.Nil(err)
 	assert.NotNil(userDetails)
 
-	assert.Nil(client.CreateWallet("default"))
+	defaultWalletID, err := client.CreateWallet("default")
+	assert.Nil(err)
 
 	walletList, err := client.Wallets()
 	assert.Nil(err)
 	assert.Equal(1, len(walletList))
 
-	value, err := client.Balance("", "BSV")
+	value, err := client.Balance(defaultWalletID, "BSV")
 	assert.Nil(err)
 	assert.NotNil(value)
 
@@ -50,7 +51,7 @@ func TestClient(t *testing.T) {
 	println(mn)
 	assert.Greater(len(mn), 0)
 
-	add, pym, err := client.Address("")
+	add, pym, err := client.Address(defaultWalletID)
 	assert.Nil(err)
 	println(add, pym)
 	assert.Greater(len(add), 0)
@@ -65,13 +66,24 @@ func TestClient(t *testing.T) {
 	assert.Nil(err)
 	assert.NotNil(hr)
 
-	assert.Nil(client.CreateWallet("one"))
+	oneWalletID, err := client.CreateWallet("one")
+	assert.Nil(err)
 
 	walletList, err = client.Wallets()
 	assert.Nil(err)
 	assert.Equal(2, len(walletList))
 
-	assert.Nil(client.DeleteWallet("one"))
+	resp, err := client.Issue(
+		Headers{
+			"walletID":   oneWalletID,
+			"protocolID": "stas",
+		},
+		DemoTokenRequest(),
+	)
+	assert.Nil(err)
+	assert.NotNil(resp)
+
+	assert.Nil(client.DeleteWallet(oneWalletID))
 	assert.Nil(client.DeleteWallets())
 	assert.Nil(client.DeleteUser())
 

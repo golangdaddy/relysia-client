@@ -108,3 +108,36 @@ func (self *Client) GetToken(id string) (*IssueRequest, error) {
 
 	return response, nil
 }
+
+func DemoTokenRequest() *IssueRequest {
+	issueRequest := &IssueRequest{}
+	issueRequest.ProtocolID = "STAS"
+	issueRequest.Name = "GO CLIENT TEST TOKEN"
+	issueRequest.Image = "https://picsum.photos/200"
+	issueRequest.Description = "a test token for github.com/golangdaddy/relysia-client"
+	issueRequest.Symbol = "TST"
+	issueRequest.TokenSupply = 1
+	issueRequest.Decimals = 0
+	issueRequest.Splitable = false
+	issueRequest.SatsPerToken = 1500
+	issueRequest.Properties.Legal.LicenceID = "?"
+	issueRequest.Properties.Legal.Terms = "?"
+	issueRequest.Properties.Issuer.Email = "?"
+	issueRequest.Properties.Issuer.LegalForm = "?"
+	issueRequest.Properties.Issuer.Organisation = "?"
+	issueRequest.Properties.Issuer.IssuerCountry = "?"
+	issueRequest.Properties.Issuer.GoverningLaw = "?"
+	issueRequest.Properties.Issuer.Jurisdiction = "?"
+	issueRequest.Properties.Meta.SchemaID = "NFT1.0/MA"
+	issueRequest.Properties.Meta.Website = "vaionex.com"
+	issueRequest.Properties.Meta.Legal.Terms = "© 2020 TAAL TECHNOLOGIES SEZC\nALL RIGHTS RESERVED. ANY USE OF THIS SOFTWARE IS SUBJECT TO TERMS AND CONDITIONS OF LICENSE. USE OF THIS SOFTWARE WITHOUT LICENSE CONSTITUTES INFRINGEMENT OF INTELLECTUAL PROPERTY. FOR LICENSE DETAILS OF THE SOFTWARE, PLEASE REFER TO: www.taal.com/stas-token-license-agreement"
+	issueRequest.Properties.Meta.Media = append(
+		issueRequest.Properties.Meta.Media,
+		&IR_Media{
+			URI:    "https://picsum.photos/200",
+			Type:   "image",
+			AltURI: "https://picsum.photos/200",
+		},
+	)
+	return issueRequest
+}
