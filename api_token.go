@@ -54,10 +54,42 @@ type MetaMedia struct {
 type IssueResponse struct {
 	StatusCode int `json:"statusCode"`
 	Data       struct {
-		Status   string       `json:"status"`
-		Msg      string       `json:"msg"`
-		TokenID  string       `json:"tokenId"`
-		TokenObj IssueRequest `json:"tokenObj"`
+		Status   string `json:"status"`
+		Msg      string `json:"msg"`
+		TokenID  string `json:"tokenId"`
+		TokenObj struct {
+			Name         string `json:"name"`
+			ProtocolID   string `json:"protocolId"`
+			Symbol       string `json:"symbol"`
+			Description  string `json:"description"`
+			Image        string `json:"image"`
+			TotalSupply  int    `json:"totalSupply"`
+			Decimals     int    `json:"decimals"`
+			SatsPerToken int    `json:"satsPerToken"`
+			Properties   struct {
+				Legal struct {
+					Terms     string `json:"terms"`
+					LicenceID string `json:"licenceId"`
+				} `json:"legal"`
+				Issuer struct {
+					Organisation  string `json:"organisation"`
+					LegalForm     string `json:"legalForm"`
+					GoverningLaw  string `json:"governingLaw"`
+					IssuerCountry string `json:"issuerCountry"`
+					Jurisdiction  string `json:"jurisdiction"`
+					Email         string `json:"email"`
+				} `json:"issuer"`
+				Meta struct {
+					SchemaID string `json:"schemaId"`
+					Website  string `json:"website"`
+					Legal    struct {
+						Terms string `json:"terms"`
+					} `json:"legal"`
+					Media []*MetaMedia `json:"media"`
+				} `json:"meta"`
+			} `json:"properties"`
+			Splitable bool `json:"splitable"`
+		} `json:"tokenObj"`
 	} `json:"data"`
 }
 
