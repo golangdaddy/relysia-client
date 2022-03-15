@@ -23,18 +23,13 @@ func (self *Client) UploadReference(walletID, filename, url, notes string) error
 	)
 	println("UPLOAD", string(b))
 
-	b, err := self.do(
+	_, err := self.do(
 		"POST",
 		"v1/upload",
 		bytes.NewBuffer(b),
 		self.POSTHeaders(headers),
 	)
 	if err != nil {
-		return fmt.Errorf("%s: %s", methodName, err.Error())
-	}
-
-	var response interface{} = new(interface{})
-	if err := json.Unmarshal(b, response); err != nil {
 		return fmt.Errorf("%s: %s", methodName, err.Error())
 	}
 
