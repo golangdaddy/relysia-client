@@ -230,12 +230,21 @@ type BalanceResponse struct {
 	Status       string `json:"status"`
 	Msg          string `json:"msg"`
 	TotalBalance struct {
-		Currency string `json:"currency"`
+		Currency string  `json:"currency"`
+		Balance  float64 `json:"balance"`
 	} `json:"totalBalance"`
-	Coins []struct {
-		Protocol string `json:"protocol"`
-		Balance  int    `json:"balance"`
-	} `json:"coins"`
+	Coins []*BalanceCoin `json:"coins"`
+}
+
+type BalanceCoin struct {
+	Protocol     string `json:"protocol"`
+	RedeemAddr   string `json:"redeemAddr"`
+	Symbol       string `json:"symbol"`
+	Image        string `json:"image"`
+	TokenBalance int    `json:"tokenBalance"`
+	Amount       int    `json:"amount"`
+	Address      string `json:"address"`
+	Path         string `json:"path"`
 }
 
 func (self *Client) Balance(walletID, requestType, currency string) (*BalanceResponse, error) {
