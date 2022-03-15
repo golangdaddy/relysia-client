@@ -81,6 +81,8 @@ func (self *Client) Issue(headers Headers, issueRequest *IssueRequest) (*IssueRe
 		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
 	}
 
+	fmt.Printf("TOKEN RESPONSE %x \n", b)
+
 	response := &IssueResponse{}
 	if err := json.Unmarshal(b, response); err != nil {
 		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
