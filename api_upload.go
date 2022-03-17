@@ -25,7 +25,7 @@ func (self *Client) UploadReference(walletID, filename, url, notes string) error
 
 	_, err := self.do(
 		"POST",
-		"v1/upload",
+		"upload",
 		bytes.NewBuffer(b),
 		self.POSTHeaders(headers),
 	)
