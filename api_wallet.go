@@ -247,6 +247,10 @@ type BalanceCoin struct {
 	Path         string `json:"path"`
 }
 
+func (self *BalanceCoin) ID() string {
+	return fmt.Sprintf("%s-%s", self.RedeemAddr, self.Symbol)
+}
+
 func (self *Client) Balance(walletID, requestType, currency string) (*BalanceResponse, error) {
 	methodName := "Balance"
 
