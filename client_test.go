@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/kr/pretty"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,6 +46,7 @@ func TestClient(t *testing.T) {
 	walletList, err := client.Wallets()
 	assert.Nil(err)
 	assert.Equal(1, len(walletList))
+	pretty.Println(walletList)
 
 	value, err := client.Balance(defaultWalletID, "STAS", "")
 	assert.Nil(err)
@@ -76,6 +78,7 @@ func TestClient(t *testing.T) {
 	walletList, err = client.Wallets()
 	assert.Nil(err)
 	assert.Equal(2, len(walletList))
+	pretty.Println(walletList)
 
 	resp, err := client.Issue(
 		Headers{
@@ -87,9 +90,19 @@ func TestClient(t *testing.T) {
 	assert.Nil(err)
 	assert.NotNil(resp)
 
-	value, err = client.Balance(defaultWalletID, "STAS", "")
+	time.Sleep(1 * time.Second)
+
+	balanceResponse, err := client.Balance(oneWalletID, "STAS", "")
 	assert.Nil(err)
-	assert.NotNil(value)
+	assert.NotNil(balanceResponse)
+	assert.Equal(1, len(balanceResponse.Coins))
+
+	for _, coin := range balanceResponse.Coins {
+		offerResponse, err := client.Offer(defaultWalletID, coin.ID(), "BSV", 0.5)
+		assert.Nil(err)
+		assert.NotNil(offerResponse)
+		pretty.Println(offerResponse)
+	}
 
 	uploadResponse, err := client.UploadReference(defaultWalletID, "myfile.png", EXAMPLE_IMAGE_URL, "")
 	assert.Nil(err)
