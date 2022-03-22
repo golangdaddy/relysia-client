@@ -2,27 +2,25 @@ package relysia
 
 import (
 	"bytes"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"time"
 )
 
 type UploadResponse struct {
-	StatusCode int `json:"statusCode"`
-	Data       struct {
-		Status    string `json:"status"`
-		Msg       string `json:"msg"`
-		UploadObj struct {
-			FileName    string    `json:"fileName"`
-			FileType    string    `json:"fileType"`
-			FileSize    int       `json:"fileSize"`
-			TimeStamp   time.Time `json:"timeStamp"`
-			Txid        string    `json:"txid"`
-			Address     string    `json:"address"`
-			AddressPath string    `json:"addressPath"`
-			URL         string    `json:"url"`
-		} `json:"uploadObj"`
-	} `json:"data"`
+	Status    string `json:"status"`
+	Msg       string `json:"msg"`
+	UploadObj struct {
+		FileName    string    `json:"fileName"`
+		FileType    string    `json:"fileType"`
+		FileSize    int       `json:"fileSize"`
+		TimeStamp   time.Time `json:"timeStamp"`
+		Txid        string    `json:"txid"`
+		Address     string    `json:"address"`
+		AddressPath string    `json:"addressPath"`
+		URL         string    `json:"url"`
+	} `json:"uploadObj"`
 }
 
 func (self *Client) UploadReference(walletID, filename, url, notes string) (*UploadResponse, error) {
@@ -50,6 +48,8 @@ func (self *Client) UploadReference(walletID, filename, url, notes string) (*Upl
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
 	}
+
+	fmt.Println("UPLOADRESP", hex.EncodeToString(b))
 
 	uploadResponse := &UploadResponse{}
 	if err := json.Unmarshal(b, uploadResponse); err != nil {

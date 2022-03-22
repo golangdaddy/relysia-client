@@ -8,6 +8,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const (
+	EXAMPLE_IMAGE_URL = "https://www.relysia.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FRelysiaLogo_1.5da1be3a.svg&w=750&q=75"
+)
+
 func TestClient(t *testing.T) {
 	assert := assert.New(t)
 
@@ -86,6 +90,11 @@ func TestClient(t *testing.T) {
 	value, err = client.Balance(defaultWalletID, "STAS", "")
 	assert.Nil(err)
 	assert.NotNil(value)
+
+	uploadResponse, err := client.UploadReference(defaultWalletID, "myfile.png", EXAMPLE_IMAGE_URL, "")
+	assert.Nil(err)
+	assert.NotNil(uploadResponse)
+	assert.Len(uploadResponse.UploadObj.URL, 68)
 
 	assert.Nil(client.DeleteWallet(oneWalletID))
 	assert.Nil(client.DeleteWallets())
