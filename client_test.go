@@ -94,7 +94,7 @@ func TestClient(t *testing.T) {
 	assert.Nil(err)
 	assert.NotNil(resp)
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(5 * time.Second)
 
 	balanceResponse, err := client.Balance(oneWalletID, "STAS", "")
 	assert.Nil(err)
@@ -106,6 +106,12 @@ func TestClient(t *testing.T) {
 		assert.Nil(err)
 		assert.NotNil(offerResponse)
 		pretty.Println(offerResponse)
+
+		swapHex := offerResponse.Contents[0].SwapOfferHex
+		swapResponse, err := client.Swap(defaultWalletID, swapHex)
+		assert.Nil(err)
+		assert.NotNil(swapResponse)
+		pretty.Println(swapResponse)
 	}
 
 	uploadResponse, err := client.UploadReference(defaultWalletID, "myfile.png", EXAMPLE_IMAGE_URL, "")
