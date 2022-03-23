@@ -38,7 +38,7 @@ type IssueRequest struct {
 			Media []*MetaMedia `json:"media"`
 		} `json:"meta"`
 	} `json:"properties"`
-	Splitable bool `json:"splitable,omitempty"`
+	Splitable bool `json:"splitable"`
 	//
 	ContractTxid    string `json:"contractTxid,omitempty"`
 	IssueTxid       string `json:"issueTxid,omitempty"`
@@ -73,7 +73,6 @@ func (self *Client) Issue(headers Headers, issueRequest *IssueRequest) (*IssueRe
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
 	}
-	println(string(b))
 
 	b, err = self.do(
 		"POST",
@@ -84,8 +83,6 @@ func (self *Client) Issue(headers Headers, issueRequest *IssueRequest) (*IssueRe
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
 	}
-
-	fmt.Printf("TOKEN RESPONSE %x \n", b)
 
 	response := &IssueResponse{}
 	if err := json.Unmarshal(b, response); err != nil {

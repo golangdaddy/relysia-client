@@ -80,12 +80,16 @@ func TestClient(t *testing.T) {
 	assert.Equal(2, len(walletList))
 	pretty.Println(walletList)
 
+	tokenRequest := DemoTokenRequest()
+	tokenRequest.Symbol += "002"
+	pretty.Println(tokenRequest)
+
 	resp, err := client.Issue(
 		Headers{
 			"walletID":   oneWalletID,
 			"protocolID": "stas",
 		},
-		DemoTokenRequest(),
+		tokenRequest,
 	)
 	assert.Nil(err)
 	assert.NotNil(resp)
@@ -98,7 +102,7 @@ func TestClient(t *testing.T) {
 	assert.Equal(1, len(balanceResponse.Coins))
 
 	for _, coin := range balanceResponse.Coins {
-		offerResponse, err := client.Offer(defaultWalletID, coin.ID(), "BSV", 0.5)
+		offerResponse, err := client.Offer(oneWalletID, coin.ID(), "BSV", 0.5)
 		assert.Nil(err)
 		assert.NotNil(offerResponse)
 		pretty.Println(offerResponse)
