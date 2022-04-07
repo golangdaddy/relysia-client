@@ -26,12 +26,12 @@ func (self *Client) CreateWallet(walletTitle string) (string, error) {
 		self.GETHeaders(headers),
 	)
 	if err != nil {
-		return "", fmt.Errorf("%s: %s", methodName, err.Error())
+		return "", fmt.Errorf("%s: %w", methodName, err)
 	}
 
 	response := &CreateWalletResponse{}
 	if err := json.Unmarshal(b, response); err != nil {
-		return "", fmt.Errorf("%s: %s", methodName, err.Error())
+		return "", fmt.Errorf("%s: %w", methodName, err)
 	}
 
 	return response.WalletID, nil
@@ -86,12 +86,12 @@ func (self *Client) Mnemonic() (string, error) {
 		self.GETHeaders(),
 	)
 	if err != nil {
-		return "", fmt.Errorf("%s: %s", methodName, err.Error())
+		return "", fmt.Errorf("%s: %w", methodName, err)
 	}
 
 	response := &MnemonicResponse{}
 	if err := json.Unmarshal(b, response); err != nil {
-		return "", fmt.Errorf("%s: %s", methodName, err.Error())
+		return "", fmt.Errorf("%s: %w", methodName, err)
 	}
 
 	return response.Mnemonic, nil
@@ -248,7 +248,7 @@ type BalanceCoin struct {
 }
 
 func (self *BalanceCoin) ID() string {
-	return fmt.Sprintf("%s-%s", self.RedeemAddr, self.Symbol)
+	return fmt.Sprintf("%s-%s", self.RedeemAddr, string(self.Symbol[:3]))
 }
 
 func (self *Client) Balance(walletID, requestType, currency string) (*BalanceResponse, error) {

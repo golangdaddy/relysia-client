@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net"
 	"net/http"
 	"time"
@@ -55,7 +56,7 @@ func (self *Client) do(method, path string, x io.Reader, headers Headers) ([]byt
 		x,
 	)
 	if err != nil {
-		return nil, fmt.Errorf("DoRequest: %s", err)
+		return nil, fmt.Errorf("DoRequest: %w", err)
 	}
 
 	for k, v := range headers {
@@ -65,24 +66,24 @@ func (self *Client) do(method, path string, x io.Reader, headers Headers) ([]byt
 
 	resp, err := self.httpClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("DoRequest: %s", err)
+		return nil, fmt.Errorf("DoRequest: %w", err)
 	}
 
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("DoRequest: %s", err)
+		return nil, fmt.Errorf("DoRequest: %w", err)
 	}
 	resp.Body.Close()
 
 	response := &Response{}
 	if len(b) > 0 {
 		if err := json.Unmarshal(b, response); err != nil {
-			return nil, fmt.Errorf("DoRequest: Invalid response from server: %s", err)
+			return nil, fmt.Errorf("DoRequest: Invalid response from server: %w", err)
 		}
 	}
 	if resp.StatusCode != 200 || response.StatusCode != 200 {
 		var unk interface{} = new(interface{})
-		println(string(b))
+		log.Println(string(b))
 		json.Unmarshal(b, unk)
 		pretty.Println(unk)
 		return nil, fmt.Errorf("Invalid response status code from %s: %d: %s", self.host, resp.StatusCode, response.Message)
