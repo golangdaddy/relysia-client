@@ -102,12 +102,12 @@ func (self *Client) GetToken(id string) (map[string]interface{}, error) {
 		self.GETHeaders(),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
+		return nil, fmt.Errorf("%s: %w", methodName, err)
 	}
 
 	response := map[string]interface{}{}
 	if err := json.Unmarshal(b, &response); err != nil {
-		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
+		return nil, fmt.Errorf("%s: %w", methodName, err)
 	}
 
 	return response, nil
