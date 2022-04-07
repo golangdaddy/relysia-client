@@ -5,7 +5,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/kr/pretty"
 	"github.com/stretchr/testify/assert"
+)
+
+const (
+	EXAMPLE_IMAGE_URL = "https://www.relysia.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FRelysiaLogo_1.5da1be3a.svg&w=750&q=75"
 )
 
 func TestClient(t *testing.T) {
@@ -41,6 +46,7 @@ func TestClient(t *testing.T) {
 	walletList, err := client.Wallets()
 	assert.Nil(err)
 	assert.Equal(1, len(walletList))
+	pretty.Println(walletList)
 
 	value, err := client.Balance(defaultWalletID, "STAS", "")
 	assert.Nil(err)
@@ -72,20 +78,46 @@ func TestClient(t *testing.T) {
 	walletList, err = client.Wallets()
 	assert.Nil(err)
 	assert.Equal(2, len(walletList))
+	pretty.Println(walletList)
+
+	tokenRequest := DemoTokenRequest()
+	tokenRequest.Symbol += "002"
+	pretty.Println(tokenRequest)
 
 	resp, err := client.Issue(
 		Headers{
 			"walletID":   oneWalletID,
 			"protocolID": "stas",
 		},
-		DemoTokenRequest(),
+		tokenRequest,
 	)
 	assert.Nil(err)
 	assert.NotNil(resp)
 
-	value, err = client.Balance(defaultWalletID, "STAS", "")
+	time.Sleep(5 * time.Second)
+
+	balanceResponse, err := client.Balance(oneWalletID, "STAS", "")
 	assert.Nil(err)
-	assert.NotNil(value)
+	assert.NotNil(balanceResponse)
+	assert.Equal(1, len(balanceResponse.Coins))
+
+	for _, coin := range balanceResponse.Coins {
+		offerResponse, err := client.Offer(oneWalletID, coin.ID(), "BSV", 0.5)
+		assert.Nil(err)
+		assert.NotNil(offerResponse)
+		pretty.Println(offerResponse)
+
+		swapHex := offerResponse.Contents[0].SwapOfferHex
+		swapResponse, err := client.Swap(defaultWalletID, swapHex)
+		assert.Nil(err)
+		assert.NotNil(swapResponse)
+		pretty.Println(swapResponse)
+	}
+
+	uploadResponse, err := client.UploadReference(defaultWalletID, "myfile.png", EXAMPLE_IMAGE_URL, "")
+	assert.Nil(err)
+	assert.NotNil(uploadResponse)
+	assert.Len(uploadResponse.UploadObj.URL, 68)
 
 	assert.Nil(client.DeleteWallet(oneWalletID))
 	assert.Nil(client.DeleteWallets())
