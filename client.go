@@ -16,6 +16,7 @@ type Client struct {
 	httpClient *http.Client
 	host       string
 	authToken  string
+	serviceID  string
 }
 
 func NewClient() *Client {
@@ -38,6 +39,12 @@ func NewClient() *Client {
 func (self *Client) WithToken(token string) *Client {
 	newClient := *self
 	newClient.authToken = token
+	return &newClient
+}
+
+func (self *Client) WithService(id string) *Client {
+	newClient := *self
+	newClient.serviceID = id
 	return &newClient
 }
 

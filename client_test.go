@@ -22,11 +22,17 @@ func TestClient(t *testing.T) {
 	password := "this is my password"
 
 	token, err := client.SignUp(email, password)
-	assert.Nil(err)
+	if !assert.Nil(err) {
+		t.Fatal(err)
+		return
+	}
 	assert.Greater(len(token), 0)
 
 	token, err = client.Auth(email, password)
-	assert.Nil(err)
+	if !assert.Nil(err) {
+		t.Fatal(err)
+		return
+	}
 	assert.Greater(len(token), 0)
 
 	client.SetAccessToken(token)
