@@ -10,6 +10,9 @@ func (self *Client) POSTHeaders(additionalHeaders ...map[string]string) (d Heade
 	if len(self.authToken) > 0 {
 		d["authToken"] = self.authToken
 	}
+	if len(self.authToken) > 0 {
+		d["serviceID"] = self.serviceID
+	}
 	if len(additionalHeaders) > 0 {
 		for k, v := range additionalHeaders[0] {
 			d[k] = v
