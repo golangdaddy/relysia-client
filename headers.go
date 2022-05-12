@@ -10,7 +10,7 @@ func (self *Client) POSTHeaders(additionalHeaders ...map[string]string) (d Heade
 	if len(self.authToken) > 0 {
 		d["authToken"] = self.authToken
 	}
-	if len(self.authToken) > 0 {
+	if len(self.serviceID) > 0 {
 		d["serviceID"] = self.serviceID
 	}
 	if len(additionalHeaders) > 0 {
