@@ -22,7 +22,6 @@ func (self *Client) SignUp(email, pass string) (string, error) {
 			"password": pass,
 		},
 	)
-	println(string(b))
 
 	b, err := self.do(
 		"POST",
