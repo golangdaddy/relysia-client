@@ -13,10 +13,11 @@ import (
 )
 
 type Client struct {
-	httpClient *http.Client
-	host       string
-	authToken  string
-	serviceID  string
+	httpClient   *http.Client
+	host         string
+	authToken    string
+	serviceID    string
+	insecureMode bool
 }
 
 func NewClient() *Client {
@@ -34,6 +35,10 @@ func NewClient() *Client {
 		},
 	}
 	return client
+}
+
+func (self *Client) Insecure() {
+	self.insecureMode = true
 }
 
 func (self *Client) WithToken(token string) *Client {
@@ -68,7 +73,9 @@ func (self *Client) do(method, path string, x io.Reader, headers Headers) ([]byt
 
 	for k, v := range headers {
 		req.Header.Set(k, v)
-		//println("HEADER", k, v)
+		if self.insecureMode {
+			println("HEADER", k, v)
+		}
 	}
 
 	resp, err := self.httpClient.Do(req)
