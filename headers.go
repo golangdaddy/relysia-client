@@ -28,6 +28,9 @@ func (self *Client) GETHeaders(additionalHeaders ...map[string]string) (d Header
 	if len(self.authToken) > 0 {
 		d["authToken"] = self.authToken
 	}
+	if len(self.serviceID) > 0 {
+		d["serviceID"] = self.serviceID
+	}
 	if len(additionalHeaders) > 0 {
 		for k, v := range additionalHeaders[0] {
 			d[k] = v
