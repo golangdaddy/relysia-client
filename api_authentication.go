@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 )
 
 type TokenResponse struct {
@@ -22,7 +23,9 @@ func (self *Client) SignUp(email, pass string) (string, error) {
 			"password": pass,
 		},
 	)
-
+	if self.insecureMode {
+		log.Println("SIGNUP", string(b))
+	}
 	b, err := self.do(
 		"POST",
 		"v1/signUp",
@@ -50,8 +53,9 @@ func (self *Client) Auth(email, pass string) (string, error) {
 			"password": pass,
 		},
 	)
-	println(string(b))
-
+	if self.insecureMode {
+		log.Println("LOGIN", string(b))
+	}
 	b, err := self.do(
 		"POST",
 		"v1/auth",
