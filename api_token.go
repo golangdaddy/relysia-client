@@ -132,9 +132,9 @@ func DemoTokenRequest() *IssueRequest {
 	issueRequest.Properties.Issuer.IssuerCountry = "?"
 	issueRequest.Properties.Issuer.GoverningLaw = "?"
 	issueRequest.Properties.Issuer.Jurisdiction = "?"
-	issueRequest.Properties.Meta.SchemaID = "NFT1.0/MA"
-	issueRequest.Properties.Meta.Website = "vaionex.com"
-	issueRequest.Properties.Meta.Legal.Terms = "© 2020 TAAL TECHNOLOGIES SEZC\nALL RIGHTS RESERVED. ANY USE OF THIS SOFTWARE IS SUBJECT TO TERMS AND CONDITIONS OF LICENSE. USE OF THIS SOFTWARE WITHOUT LICENSE CONSTITUTES INFRINGEMENT OF INTELLECTUAL PROPERTY. FOR LICENSE DETAILS OF THE SOFTWARE, PLEASE REFER TO: www.taal.com/stas-token-license-agreement"
+	issueRequest.Properties.Meta.SchemaID = "?"
+	issueRequest.Properties.Meta.Website = "?"
+	issueRequest.Properties.Meta.Legal.Terms = "?"
 	issueRequest.Properties.Meta.Media = append(
 		issueRequest.Properties.Meta.Media,
 		&MetaMedia{

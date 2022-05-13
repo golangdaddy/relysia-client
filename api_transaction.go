@@ -4,10 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"strconv"
 )
 
-func (self *Client) Send(walletID, address, currencyType, notes string, amount float64) error {
+func (self *Client) Send(walletID, address string, amount float64) error {
 	methodName := "Send"
 
 	headers := Headers{
@@ -15,11 +14,11 @@ func (self *Client) Send(walletID, address, currencyType, notes string, amount f
 	}
 
 	b, _ := json.Marshal(
-		map[string]string{
-			"address": address,
-			"notes":   notes,
-			"type":    currencyType,
-			"amount":  strconv.FormatFloat(amount, 'f', -1, 64),
+		[]map[string]interface{}{
+			map[string]interface{}{
+				"to":     address,
+				"amount": amount,
+			},
 		},
 	)
 	println("SEND", string(b))
