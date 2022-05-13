@@ -14,10 +14,12 @@ func (self *Client) Send(walletID, address string, amount float64) error {
 	}
 
 	b, _ := json.Marshal(
-		[]map[string]interface{}{
-			map[string]interface{}{
-				"to":     address,
-				"amount": amount,
+		map[string]interface{}{
+			"dataArray": []map[string]interface{}{
+				map[string]interface{}{
+					"to":     address,
+					"amount": amount,
+				},
 			},
 		},
 	)
