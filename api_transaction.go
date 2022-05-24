@@ -43,7 +43,7 @@ func (self *Client) Send(walletID, address string, amount float64) error {
 	return nil
 }
 
-func (self *Client) SendToken(walletID, address, tokenID string) error {
+func (self *Client) SendToken(walletID, address, tokenID string, amount float64) error {
 	methodName := "SendToken"
 
 	headers := Headers{
@@ -54,14 +54,14 @@ func (self *Client) SendToken(walletID, address, tokenID string) error {
 		map[string]interface{}{
 			"dataArray": []map[string]interface{}{
 				map[string]interface{}{
-					"to": address,
-					//					"amount": amount,
+					"to":      address,
+					"amount":  amount,
 					"tokenId": tokenID,
 				},
 			},
 		},
 	)
-	println("SEND", string(b))
+	println("SEND TOKEN", string(b))
 
 	b, err := self.do(
 		"POST",
