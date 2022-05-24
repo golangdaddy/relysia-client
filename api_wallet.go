@@ -280,11 +280,11 @@ func (self *Client) Balance(walletID, requestType, currency string) (*BalanceRes
 	return response, nil
 }
 
-func (self *Client) DeleteWallet(id string) error {
+func (self *Client) DeleteWallet(walletID string) error {
 	methodName := "DeleteWallet"
 
 	headers := Headers{
-		"walletID": id,
+		"walletID": walletID,
 	}
 
 	_, err := self.do(
@@ -316,14 +316,18 @@ func (self *Client) DeleteWallets() error {
 	return nil
 }
 
-func (self *Client) Metrics() error {
+func (self *Client) Metrics(walletID string) error {
 	methodName := "Metrics"
+
+	headers := Headers{
+		"walletID": walletID,
+	}
 
 	_, err := self.do(
 		"GET",
 		"v1/metrics",
 		nil,
-		self.GETHeaders(),
+		self.GETHeaders(headers),
 	)
 	if err != nil {
 		return fmt.Errorf("%s: %s", methodName, err.Error())
