@@ -315,3 +315,19 @@ func (self *Client) DeleteWallets() error {
 
 	return nil
 }
+
+func (self *Client) Metrics() error {
+	methodName := "Metrics"
+
+	_, err := self.do(
+		"GET",
+		"v1/metrics",
+		nil,
+		self.GETHeaders(),
+	)
+	if err != nil {
+		return fmt.Errorf("%s: %s", methodName, err.Error())
+	}
+
+	return nil
+}
