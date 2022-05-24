@@ -25,7 +25,7 @@ func NewClient() *Client {
 	client := &Client{
 		host: "https://api.relysia.com",
 		httpClient: &http.Client{
-			Timeout: time.Second * 10,
+			Timeout: time.Second * 0,
 			Transport: &http.Transport{
 				Dial: (&net.Dialer{
 					Timeout: 5 * time.Second,
