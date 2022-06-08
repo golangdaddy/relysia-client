@@ -237,18 +237,19 @@ type BalanceResponse struct {
 }
 
 type BalanceCoin struct {
-	Protocol     string `json:"protocol"`
-	RedeemAddr   string `json:"redeemAddr"`
-	Symbol       string `json:"symbol"`
-	Image        string `json:"image"`
-	TokenBalance int    `json:"tokenBalance"`
-	Amount       int    `json:"amount"`
-	Address      string `json:"address"`
-	Path         string `json:"path"`
-}
-
-func (self *BalanceCoin) ID() string {
-	return fmt.Sprintf("%s-%s", self.RedeemAddr, string(self.Symbol[:3]))
+	ID                   string `json:"Id"`
+	Protocol             string `json:"protocol"`
+	TokenID              string `json:"tokenId"`
+	Splitable            bool   `json:"splitable"`
+	ListenerVerification bool   `json:"listenerVerification"`
+	Address              string `json:"address"`
+	SatsPerToken         int    `json:"satsPerToken"`
+	Symbol               string `json:"symbol"`
+	RedeemAddr           string `json:"redeemAddr"`
+	Image                string `json:"image"`
+	Amount               int    `json:"amount"`
+	Sn                   int    `json:"sn"`
+	Supply               int    `json:"supply"`
 }
 
 func (self *Client) Balance(walletID, requestType, currency string) (*BalanceResponse, error) {
@@ -269,6 +270,8 @@ func (self *Client) Balance(walletID, requestType, currency string) (*BalanceRes
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
 	}
+
+	//log.Println(string(b))
 
 	response := &BalanceResponse{}
 	if err := json.Unmarshal(b, response); err != nil {

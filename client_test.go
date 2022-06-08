@@ -87,10 +87,22 @@ func TestClient(t *testing.T) {
 	pretty.Println(walletList)
 
 	tokenRequest := DemoTokenRequest()
+	//tokenRequest.Symbol += "002"
+	pretty.Println(tokenRequest)
+	resp, err := client.Issue(
+		Headers{
+			"walletID":   oneWalletID,
+			"protocolID": "stas",
+		},
+		tokenRequest,
+	)
+	assert.Nil(err)
+	assert.NotNil(resp)
+
+	tokenRequest = DemoTokenRequest()
 	tokenRequest.Symbol += "002"
 	pretty.Println(tokenRequest)
-
-	resp, err := client.Issue(
+	resp, err = client.Issue(
 		Headers{
 			"walletID":   oneWalletID,
 			"protocolID": "stas",
@@ -105,10 +117,10 @@ func TestClient(t *testing.T) {
 	balanceResponse, err := client.Balance(oneWalletID, "STAS", "")
 	assert.Nil(err)
 	assert.NotNil(balanceResponse)
-	assert.Equal(1, len(balanceResponse.Coins))
+	assert.Equal(2, len(balanceResponse.Coins))
 
 	for _, coin := range balanceResponse.Coins {
-		offerResponse, err := client.Offer(oneWalletID, coin.ID(), "BSV", 0.5)
+		offerResponse, err := client.Offer(oneWalletID, coin.TokenID, "BSV", 0.5)
 		assert.Nil(err)
 		assert.NotNil(offerResponse)
 		pretty.Println(offerResponse)
