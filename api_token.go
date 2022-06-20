@@ -7,7 +7,7 @@ import (
 )
 
 type IssueRequest struct {
-	ID           int    `json:"id,omitempty"`
+	ID           string `json:"id,omitempty"`
 	Name         string `json:"name"`
 	ProtocolID   string `json:"protocolId"`
 	Symbol       string `json:"symbol"`
