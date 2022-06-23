@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 )
 
 func (self *Client) Send(walletID, address string, amount float64) error {
@@ -72,6 +73,8 @@ func (self *Client) SendToken(walletID, address, tokenID string, amount float64)
 	if err != nil {
 		return fmt.Errorf("%s: %s", methodName, err.Error())
 	}
+
+	log.Println(string(b))
 
 	var response interface{} = new(interface{})
 	if err := json.Unmarshal(b, response); err != nil {
