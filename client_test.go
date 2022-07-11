@@ -125,7 +125,7 @@ func TestClient(t *testing.T) {
 		assert.NotNil(offerResponse)
 		pretty.Println(offerResponse)
 
-		swapHex := offerResponse.Contents[0].SwapOfferHex
+		swapHex := offerResponse.Contents[0]
 		swapResponse, err := client.Swap(defaultWalletID, swapHex)
 		assert.Nil(err)
 		assert.NotNil(swapResponse)

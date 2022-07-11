@@ -18,14 +18,14 @@ type Offer struct {
 }
 
 type OfferResponse struct {
-	Status   string                  `json:"status"`
-	Msg      string                  `json:"msg"`
-	Contents []*OfferResponseContent `json:"contents"`
+	Status   string   `json:"status"`
+	Msg      string   `json:"msg"`
+	Contents []string `json:"contents"`
 }
 
 type OfferResponseContent struct {
 	MakerPublicKeyHash string  `json:"makerPublicKeyHash"`
-	prevTxid           string  `json:"prevTxid"`
+	PrevTxid           string  `json:"prevTxid"`
 	SerialNumber       float64 `json:"serialNumber"`
 	SwapId             string  `json:"swapId"`
 	SwapOfferHex       string  `json:"swapOfferHex"`
@@ -64,6 +64,7 @@ func (self *Client) Offer(walletID, tokenID, reciveType string, amount float64) 
 		bytes.NewBuffer(b),
 		self.POSTHeaders(headers),
 	)
+	println(string(b))
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", methodName, err.Error())
 	}
